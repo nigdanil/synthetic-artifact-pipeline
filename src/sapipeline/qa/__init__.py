@@ -1,1 +1,5 @@
-"""Reserved module for a future separately-approved pipeline task."""
+"""Read-only technical image, annotation and ROI quality gates."""
+
+from .validator import QAResult, validate_artifact
+
+__all__ = ["QAResult", "validate_artifact"]

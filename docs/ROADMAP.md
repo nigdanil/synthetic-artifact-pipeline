@@ -17,12 +17,12 @@ all acceptance criteria for production-quality synthetic data are met.
 
 ## Next tasks — one at a time
 
-- [ ] **6.6 — Early SAP QA Validator (next):** accept original IMAGE,
+- [x] **6.6 — Early SAP QA Validator (accepted technical prototype):** accept original IMAGE,
   modified IMAGE, MASK, annotations and ROI selection; check dimensions,
   bbox/annotation invariants, exact unchanged pixels outside the mask,
   clipping/coverage and return a structured QA result plus clear failures.
-  **Gate:** automated tests, one real-image run, negative cases, manual review.
-- [ ] **6.7 — More realistic glare:** introduce smooth elliptical / oriented /
+  **Gate:** 263 automated tests and Ruff passed; real-image ComfyUI smoke test showed green QA PASS. Negative failure cases covered by automated tests; technical PASS is not training approval.
+- [ ] **6.7 — More realistic glare (next):** introduce smooth elliptical / oriented /
   directional illumination with controlled angle, radius, falloff,
   intensity and seed; retain mask constraints and photometric invariants.
   **Gate:** a small, deterministic set of varied examples reviewed for

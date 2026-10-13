@@ -22,6 +22,8 @@ The repository contains a tested local image-augmentation prototype (Tasks 1–5
 
 **Task 6.5 (accepted as a functional prototype):** `SAP Highlight Effect` consumes the original IMAGE and SAP MASK, applies the existing deterministic soft-glow/hotspot photometric engine, and returns an IMAGE plus a private short summary. See [ComfyUI Highlight Effect](COMFYUI_HIGHLIGHT_EFFECT.md).
 
-**Next planned tasks (not implemented):** an early automatic QA validator (Stage 6.6), more realistic glare geometries (Stage 6.7), annotation-preserving exporter (Stage 7), full QA/pilot acceptance (Stages 8–9). The current bbox-local soft glow is not approved for model training without visual review. See [roadmap](ROADMAP.md). Do not publish source data or reports of third-party datasets.
+**Task 6.6 (accepted as a technical prototype after user-side ComfyUI green-PASS smoke test):** `SAP QA Validator` checks source/modified RGB, effect mask and source bbox/selection invariants; emits BOOLEAN PASS/FAIL, JSON metrics and a green/red-border review image. Technical PASS never means approved-for-training. See [ComfyUI QA Validator](COMFYUI_QA_VALIDATOR.md).
+
+**Next planned tasks (not implemented):** more realistic glare geometries (Stage 6.7), annotation-preserving exporter (Stage 7), full QA/pilot acceptance (Stages 8–9). The current bbox-local soft glow is not approved for model training without visual review. See [roadmap](ROADMAP.md). Do not publish source data or reports of third-party datasets.
 
 Detailed internal project plans and source dataset audits are **kept outside this public repository**.

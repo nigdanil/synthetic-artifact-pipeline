@@ -139,6 +139,19 @@ contains the Git Bash installation/acceptance steps.
 **Quality gate:** `hotspot` is intentionally harsh and is not ready for YOLO
 training without realism improvements and visual QA.
 
+## Task 6.6: SAP QA Validator (technical gate)
+
+Adds a CPU-first, read-only `SAP QA Validator` custom node after Highlight
+Effect. It validates dimensions, original bounding boxes, selected ROI, mask
+coverage, no unintended changes outside the mask, and newly clipped pixels.
+The boolean result, JSON report, and green/red-border review preview can be
+inspected in ComfyUI. **Technical PASS is not a manual quality approval.**
+
+The public starter workflow is
+`workflows/templates/sap_qa_validator_v1.json`; the local ready workflow with
+an actual machine path stays **only** under ignored `workflows/existing/`.
+See [Stage 6.6 installation and acceptance](docs/COMFYUI_QA_VALIDATOR.md).
+
 ## Source layout
 
 - `src/sapipeline/` — pure Python library namespace for planned parsing, mask generation and compositing
