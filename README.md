@@ -2,20 +2,21 @@
 
 Public Python scaffold for **deterministic image augmentation with bbox-aware effect masks**. Planned integration with an existing **ComfyUI** graph; this repository does not contain a trained model, original photographs or a working effect pipeline yet.
 
-**State (2026-10-13):** Task 1 dataset ZIP indexer implemented. SEG/YOLO bbox parsers, ROI selection, masks, effects, custom nodes and exporter remain **not implemented**.
+**State (2026-10-13):** Tasks 1–2 implemented: dataset ZIP indexer and canonical SEG/YOLO bbox adapters. ROI selection, masks, effects, custom nodes and exporter remain **not implemented**.
 
-## Quick start on Windows (PowerShell)
+## Quick start on Windows (Git Bash)
 
-```powershell
-# From the repository root
-py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -e ".[dev,image]"
-.\.venv\Scripts\python.exe -m pytest -q
-.\.venv\Scripts\python.exe scripts\check_environment.py
+```bash
+cd /d/my_work/synthetic-artifact-pipeline-public
+python -m venv .venv
+source .venv/Scripts/activate
+python -m pip install -e '.[dev,image]'
+python -m pytest -q
+python scripts/check_environment.py
 ```
 
-Install Python 3.12 and Git first. ComfyUI stays in its existing installation and is **not** modified by this setup.
+Install Python 3.12 and Git first. ComfyUI stays in its existing installation and is
+**not** modified by this setup.
 
 ## Task 1: local ZIP indexing (Git Bash)
 
@@ -29,6 +30,17 @@ python -m pytest -q
 
 Private index/report outputs are ignored by Git. See [dataset indexing instructions](docs/DATASET_INDEXING.md); never commit datasets, the index or the report.
 
+## Task 2: validate SEG geometry and create private overlays (Git Bash)
+
+```bash
+source .venv/Scripts/activate
+python scripts/validate_annotations.py
+```
+
+The parser uses **encoded image pixels without EXIF rotation**. YOLO TXT requires an
+explicit class-ID mapping; no class IDs are guessed. Preview PNGs and report JSON
+are written under Git-ignored `reports/`. See [annotation adapters](docs/ANNOTATIONS.md).
+
 ## Source layout
 
 - `src/sapipeline/` — pure Python library namespace for planned parsing, mask generation and compositing
@@ -38,6 +50,7 @@ Private index/report outputs are ignored by Git. See [dataset indexing instructi
 - `data/work/`, `data/pilot/`, `outputs/`, `reports/` — local-only derivatives
 - `configs/class_mappings/` — local-only third-party class-to-ID mappings
 - `scripts/index_dataset.py` — read-only local ZIP indexer (Task 1)
+- `scripts/validate_annotations.py` — private SEG geometry report and 5 bbox previews (Task 2)
 - `scripts/check_environment.py` — read-only diagnostics
 - `scripts/check_public_repo.py` — audit staged/tracked content before every public push
 - `docs/` — public setup and integration documentation
