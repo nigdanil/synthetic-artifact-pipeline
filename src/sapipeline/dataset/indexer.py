@@ -6,10 +6,10 @@ It indexes paths, image dimensions, raw SHA-256 hashes and annotation counts.
 
 from __future__ import annotations
 
+import json
 from collections import Counter, defaultdict
 from hashlib import sha256
 from io import BytesIO
-import json
 from pathlib import Path, PurePosixPath
 from typing import Any
 from zipfile import BadZipFile, ZipFile, ZipInfo

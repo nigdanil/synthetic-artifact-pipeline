@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import argparse
-from io import BytesIO
 import json
 import os
-from pathlib import Path, PurePosixPath
 import sys
 import tempfile
+from io import BytesIO
+from pathlib import Path, PurePosixPath
 from zipfile import ZipFile
 
 from PIL import Image, ImageDraw

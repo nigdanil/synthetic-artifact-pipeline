@@ -5,9 +5,9 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from pathlib import Path
 import sys
 import tempfile
+from pathlib import Path
 
 from sapipeline.dataset import DatasetIndexError, build_index
 

@@ -2,7 +2,7 @@
 
 Public Python scaffold for **deterministic image augmentation with bbox-aware effect masks**. Planned integration with an existing **ComfyUI** graph; this repository does not contain a trained model, original photographs or a working effect pipeline yet.
 
-**State (2026-10-13):** Tasks 1–2 implemented: dataset ZIP indexer and canonical SEG/YOLO bbox adapters. ROI selection, masks, effects, custom nodes and exporter remain **not implemented**.
+**State (2026-10-13):** Tasks 1–5 implemented: ZIP indexer, SEG/YOLO adapters, verified ZIP loader, ROI selection, bbox-derived effect masks and deterministic local highlight effects. ComfyUI nodes and exporter remain **not implemented**.
 
 ## Quick start on Windows (Git Bash)
 
@@ -41,6 +41,49 @@ The parser uses **encoded image pixels without EXIF rotation**. YOLO TXT require
 explicit class-ID mapping; no class IDs are guessed. Preview PNGs and report JSON
 are written under Git-ignored `reports/`. See [annotation adapters](docs/ANNOTATIONS.md).
 
+## Task 3: verified local image + ROI preview (Git Bash)
+
+```bash
+source .venv/Scripts/activate
+python scripts/preview_roi.py --mode random_one --seed 42017
+python scripts/preview_roi.py --mode random_n --count 3 --seed 42017
+for i in 0 1 2 3 4; do python scripts/preview_roi.py --sample-index "$i" --mode random_n --count 3; done
+```
+
+Run Task 1 indexing first and keep source ZIP files under ignored `data/raw/`.
+Selected bounding boxes are shown in **cyan**, other labels in red. Preview PNG
+and JSON stay private under `reports/roi_previews/`. See [ROI selection](docs/ROI_SELECTION.md).
+No mask or glow is produced in this step.
+
+## Task 4: build private rectangular effect masks (Git Bash)
+
+```bash
+source .venv/Scripts/activate
+python scripts/preview_mask.py --mode random_n --count 3 --seed 42017 \
+  --mask-kind soft_rect --feather-px 16 --pad-px 0 --strength 1
+python scripts/preview_mask.py --mode by_index --instance-index 0 --mask-kind rect
+```
+
+Masks are float32 in memory and saved as grayscale PNGs with a separate
+**visual-only** cyan overlay and private JSON report under ignored
+`reports/mask_previews/`. These are bbox *effect* masks, not segmentations
+and not generated photographs. See [Mask Builder](docs/MASKS.md).
+
+
+## Task 5: private local highlight preview (Git Bash)
+
+```bash
+source .venv/Scripts/activate
+python scripts/preview_effect.py --mode random_n --count 3 --seed 42017 \
+  --mask-kind soft_rect --effect-kind soft_glow --feather-px 16
+python scripts/preview_effect.py --mode by_index --instance-index 0 \
+  --mask-kind rect --effect-kind hotspot
+```
+
+This stage applies a deterministic **photometric** effect using the mask from Task 4
+and writes local-only `*_effect.png`, `*_mask.png`, `*_overlay.png` and JSON report
+files to ignored `reports/effect_previews/`. See [Effects](docs/EFFECTS.md).
+
 ## Source layout
 
 - `src/sapipeline/` — pure Python library namespace for planned parsing, mask generation and compositing
@@ -51,6 +94,9 @@ are written under Git-ignored `reports/`. See [annotation adapters](docs/ANNOTAT
 - `configs/class_mappings/` — local-only third-party class-to-ID mappings
 - `scripts/index_dataset.py` — read-only local ZIP indexer (Task 1)
 - `scripts/validate_annotations.py` — private SEG geometry report and 5 bbox previews (Task 2)
+- `scripts/preview_roi.py` — private image + selected ROI preview (Task 3)
+- `scripts/preview_mask.py` — private bbox effect mask and overlay preview (Task 4)
+- `scripts/preview_effect.py` — private local highlight compositing preview (Task 5)
 - `scripts/check_environment.py` — read-only diagnostics
 - `scripts/check_public_repo.py` — audit staged/tracked content before every public push
 - `docs/` — public setup and integration documentation

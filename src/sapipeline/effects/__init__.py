@@ -1,1 +1,5 @@
-"""Reserved module for a future separately-approved pipeline task."""
+"""Deterministic local photometric effects."""
+
+from .highlight import EffectError, HighlightResult, apply_highlight
+
+__all__ = ["EffectError", "HighlightResult", "apply_highlight"]

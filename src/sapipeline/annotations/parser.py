@@ -6,12 +6,13 @@ No image transforms, class-ID inference, clipping, or loss of SEG source fields.
 
 from __future__ import annotations
 
-from copy import deepcopy
-from dataclasses import dataclass
 import json
 import math
+from collections.abc import Mapping
+from copy import deepcopy
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Literal, Mapping
+from typing import Any, Literal
 
 
 class AnnotationError(ValueError):
@@ -57,10 +58,10 @@ def _number(value: Any, label: str) -> int | float:
 
 
 def _bbox(
-    x1: int | float,
-    y1: int | float,
-    x2: int | float,
-    y2: int | float,
+    x1: float,
+    y1: float,
+    x2: float,
+    y2: float,
     width: int,
     height: int,
     label: str,

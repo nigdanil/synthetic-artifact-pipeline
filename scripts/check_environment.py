@@ -6,10 +6,10 @@ This is NOT the dataset indexer, parser, or effect pipeline.
 from __future__ import annotations
 
 import argparse
-from importlib.util import find_spec
-from pathlib import Path
 import platform
 import sys
+from importlib.util import find_spec
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
