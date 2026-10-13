@@ -2,7 +2,7 @@
 
 Public Python scaffold for **deterministic image augmentation with bbox-aware effect masks**. Planned integration with an existing **ComfyUI** graph; this repository does not contain a trained model, original photographs or a working effect pipeline yet.
 
-**State (2026-10-13):** project skeleton only. Dataset indexer, SEG/YOLO parsers, ROI selection, masks, effects, custom nodes and exporter are planned, **not implemented**.
+**State (2026-10-13):** Task 1 dataset ZIP indexer implemented. SEG/YOLO bbox parsers, ROI selection, masks, effects, custom nodes and exporter remain **not implemented**.
 
 ## Quick start on Windows (PowerShell)
 
@@ -17,6 +17,18 @@ py -3.12 -m venv .venv
 
 Install Python 3.12 and Git first. ComfyUI stays in its existing installation and is **not** modified by this setup.
 
+## Task 1: local ZIP indexing (Git Bash)
+
+Keep the original ZIP archives under `data/raw/` (Git-ignored), then run from the active `.venv`:
+
+```bash
+source .venv/Scripts/activate
+python scripts/index_dataset.py
+python -m pytest -q
+```
+
+Private index/report outputs are ignored by Git. See [dataset indexing instructions](docs/DATASET_INDEXING.md); never commit datasets, the index or the report.
+
 ## Source layout
 
 - `src/sapipeline/` — pure Python library namespace for planned parsing, mask generation and compositing
@@ -25,6 +37,7 @@ Install Python 3.12 and Git first. ComfyUI stays in its existing installation an
 - `data/raw/` — **local-only** input images and annotations; never commit
 - `data/work/`, `data/pilot/`, `outputs/`, `reports/` — local-only derivatives
 - `configs/class_mappings/` — local-only third-party class-to-ID mappings
+- `scripts/index_dataset.py` — read-only local ZIP indexer (Task 1)
 - `scripts/check_environment.py` — read-only diagnostics
 - `scripts/check_public_repo.py` — audit staged/tracked content before every public push
 - `docs/` — public setup and integration documentation

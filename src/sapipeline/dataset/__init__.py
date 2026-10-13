@@ -1,1 +1,5 @@
-"""Reserved module for a future separately-approved pipeline task."""
+"""Local dataset indexing; annotation parsing is a later pipeline stage."""
+
+from .indexer import DatasetIndexError, build_index
+
+__all__ = ["DatasetIndexError", "build_index"]
