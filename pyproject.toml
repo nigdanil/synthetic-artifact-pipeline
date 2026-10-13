@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synthetic-artifact-pipeline"
+version = "0.1.0"
+description = "Scaffold for reproducible synthetic image artifacts from bounding box annotations"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = []
+
+[project.optional-dependencies]
+image = [
+  "numpy>=2.0,<3.0",
+  "Pillow>=11.0,<13.0",
+  "opencv-python-headless>=4.10,<5.0",
+]
+dev = [
+  "pytest>=8.0,<10.0",
+  "ruff>=0.8,<1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
