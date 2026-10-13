@@ -1,6 +1,6 @@
 # Status of the public scaffold (2026-10-13)
 
-The repository contains Python packaging, placeholder modules, empty runtime directories, a read-only environment check and initial smoke tests. It does not contain implemented augmentation or functional ComfyUI custom nodes.
+The repository contains a tested local image-augmentation prototype (Tasks 1–5), plus a read-only ComfyUI preflight and loader/ROI selector classic custom nodes. The Dataset Loader and ROI Selector were verified in the user's ComfyUI. Mask Builder was confirmed in the user’s ComfyUI (original, bbox overlay, MASK and cyan mask overlay).
 
 **Implemented (Task 1):** read-only ZIP indexer, JPEG/SEG pairing, raw SHA-256 hashes, exact-duplicate/cross-split grouping and private JSON reports. See [dataset indexing](DATASET_INDEXING.md). Confirmed locally on Windows: both archives indexed; Python environment/tests verified.
 
@@ -12,6 +12,16 @@ The repository contains Python packaging, placeholder modules, empty runtime dir
 
 **Implemented (Task 5):** deterministic local highlight compositing (`soft_glow`, `hotspot`) driven by Task-4 masks, with local effect/mask/overlay PNG outputs and a private JSON report. See [effects](EFFECTS.md).
 
-**Next planned task (not implemented):** connect Python logic to the user's existing ComfyUI graph / exporter layer. Do not publish source data or reports of third-party datasets.
+**Task 6.1 (inspection only):** read-only local ComfyUI and optional exported workflow preflight; no custom nodes installed or graph modified. See [ComfyUI preflight](COMFYUI_PREFLIGHT.md).
+
+**Task 6.2 (accepted):** `SAP Dataset Loader` reads a verified indexed JPEG+SEG pair from local ZIP files and outputs ComfyUI `IMAGE`, opaque `SAP_ANNOTATIONS`, and a short source summary. Includes a minimal workflow template. See [installation](COMFYUI_DATASET_LOADER.md).
+
+**Task 6.3 (accepted):** `SAP ROI Selector` receives `SAP_ANNOTATIONS` and the source `IMAGE`, selects bbox instances via the pure-Python selector, and produces a cyan/red review preview plus opaque selection metadata. See [ComfyUI ROI Selector](COMFYUI_ROI_SELECTOR.md).
+
+**Task 6.4 (accepted):** native `SAP Mask Builder` consumes an ROI selection and original IMAGE, returns a float32 `[1,H,W]` ComfyUI MASK and image overlay. See [ComfyUI Mask Builder](COMFYUI_MASK_BUILDER.md).
+
+**Task 6.5 (accepted as a functional prototype):** `SAP Highlight Effect` consumes the original IMAGE and SAP MASK, applies the existing deterministic soft-glow/hotspot photometric engine, and returns an IMAGE plus a private short summary. See [ComfyUI Highlight Effect](COMFYUI_HIGHLIGHT_EFFECT.md).
+
+**Next planned tasks (not implemented):** an early automatic QA validator (Stage 6.6), more realistic glare geometries (Stage 6.7), annotation-preserving exporter (Stage 7), full QA/pilot acceptance (Stages 8–9). The current bbox-local soft glow is not approved for model training without visual review. See [roadmap](ROADMAP.md). Do not publish source data or reports of third-party datasets.
 
 Detailed internal project plans and source dataset audits are **kept outside this public repository**.

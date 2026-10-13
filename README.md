@@ -1,8 +1,10 @@
 # Synthetic Artifact Pipeline (SAP)
 
-Public Python scaffold for **deterministic image augmentation with bbox-aware effect masks**. Planned integration with an existing **ComfyUI** graph; this repository does not contain a trained model, original photographs or a working effect pipeline yet.
+Public Python scaffold for **deterministic image augmentation with bbox-aware effect masks**. Planned integration with an existing **ComfyUI** graph; this repository does not contain a trained model or original photographs. Python-based local effects work; the ComfyUI chain is being integrated step by step.
 
-**State (2026-10-13):** Tasks 1–5 implemented: ZIP indexer, SEG/YOLO adapters, verified ZIP loader, ROI selection, bbox-derived effect masks and deterministic local highlight effects. ComfyUI nodes and exporter remain **not implemented**.
+**State (2026-10-13):** Tasks 1–5 and ComfyUI stages 6.1–6.5 implemented: ZIP indexer, SEG/YOLO adapters, verified ZIP loader, ROI selection, bbox-derived effect masks and deterministic local highlight effects. QA, realistic directional glare, annotation-preserving export and batch pilot remain **not implemented**.
+
+See the [implementation roadmap](docs/ROADMAP.md) for acceptance gates and the next tasks.
 
 ## Quick start on Windows (Git Bash)
 
@@ -84,10 +86,63 @@ This stage applies a deterministic **photometric** effect using the mask from Ta
 and writes local-only `*_effect.png`, `*_mask.png`, `*_overlay.png` and JSON report
 files to ignored `reports/effect_previews/`. See [Effects](docs/EFFECTS.md).
 
+## Task 6.1: read-only ComfyUI preflight (Git Bash)
+
+```bash
+source .venv/Scripts/activate
+python scripts/inspect_comfyui.py --comfyui-dir 'D:/path/to/ComfyUI'
+```
+
+Review node types and runtime layout before writing integration code. Optional
+workflow JSON stays in ignored `workflows/existing/`; private summaries stay
+in ignored `reports/`. No custom node is installed and no existing workflow
+is changed. See [ComfyUI preflight](docs/COMFYUI_PREFLIGHT.md).
+
+## Task 6.2: SAP Dataset Loader inside ComfyUI (Git Bash)
+
+Task 6.2 implements the first actual ComfyUI custom node. It reads one indexed
+JPEG+SEG pair and emits `IMAGE`, `SAP_ANNOTATIONS` and a non-sensitive summary.
+No effects are applied here, and the existing ComfyUI graph is left intact.
+
+See [loader installation](docs/COMFYUI_DATASET_LOADER.md) and the public
+[workflow template](workflows/templates/sap_dataset_loader_v1.json).
+
+## Stage 6.3: bbox ROI selection inside ComfyUI (Git Bash)
+
+Install the updated `custom_nodes/sap_dataset_loader` extension in the already
+configured ComfyUI and restart its backend. Then open
+`workflows/templates/sap_roi_selector_v1.json` and set the Dataset Loader's
+`project_root`. See [ROI Selector ComfyUI guide](docs/COMFYUI_ROI_SELECTOR.md).
+The selector outputs an opaque `SAP_ROI_SELECTION` plus a cyan/red bbox preview,
+not a mask or effect. The next stage will connect `SAP Mask Builder`.
+
+
+## Task 6.4: native ComfyUI MASK from selected ROI
+
+The `SAP Mask Builder` classic custom node receives `SAP_ROI_SELECTION` and
+original `IMAGE`. It builds a native `MASK` in float32 `[B,H,W]` and an RGB
+cyan overlay preview; no effect or image geometry change is performed. The
+public starter graph lives at `workflows/templates/sap_mask_builder_v1.json`.
+See [ComfyUI Mask Builder](docs/COMFYUI_MASK_BUILDER.md) for a Git Bash-only
+installation and smoke test. Keep your local ready graph in `workflows/existing/`.
+
+
+## Task 6.5: SAP Highlight Effect inside ComfyUI
+
+The `SAP Highlight Effect` node uses the original `IMAGE` and native `MASK` to
+produce a deterministically brightened `IMAGE`. It reuses the Python core from
+Task 5 and does not modify the source image or bbox data. The public starter
+workflow is `workflows/templates/sap_highlight_effect_v1.json` (empty
+`project_root`), and [ComfyUI Highlight Effect](docs/COMFYUI_HIGHLIGHT_EFFECT.md)
+contains the Git Bash installation/acceptance steps.
+
+**Quality gate:** `hotspot` is intentionally harsh and is not ready for YOLO
+training without realism improvements and visual QA.
+
 ## Source layout
 
 - `src/sapipeline/` — pure Python library namespace for planned parsing, mask generation and compositing
-- `custom_nodes/` — future ComfyUI integration, currently a placeholder
+- `custom_nodes/sap_dataset_loader/` — Task 6.2 ComfyUI read-only dataset loader
 - `workflows/existing/` — **local-only** copy of a personal ComfyUI graph
 - `data/raw/` — **local-only** input images and annotations; never commit
 - `data/work/`, `data/pilot/`, `outputs/`, `reports/` — local-only derivatives
@@ -97,6 +152,7 @@ files to ignored `reports/effect_previews/`. See [Effects](docs/EFFECTS.md).
 - `scripts/preview_roi.py` — private image + selected ROI preview (Task 3)
 - `scripts/preview_mask.py` — private bbox effect mask and overlay preview (Task 4)
 - `scripts/preview_effect.py` — private local highlight compositing preview (Task 5)
+- `scripts/inspect_comfyui.py` — read-only local ComfyUI/workflow preflight (Task 6.1)
 - `scripts/check_environment.py` — read-only diagnostics
 - `scripts/check_public_repo.py` — audit staged/tracked content before every public push
 - `docs/` — public setup and integration documentation

@@ -1,0 +1,508 @@
+{
+  "id": "sap-mask-builder-v1",
+  "revision": 0,
+  "last_node_id": 9,
+  "last_link_id": 10,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "SAPDatasetLoader",
+      "pos": [
+        65,
+        250
+      ],
+      "size": [
+        480,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            1,
+            2,
+            4,
+            7
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "annotations",
+          "type": "SAP_ANNOTATIONS",
+          "links": [
+            3
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "source_summary",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPDatasetLoader"
+      },
+      "widgets_values": [
+        "D:/my_work/synthetic-artifact-pipeline-public",
+        "learning",
+        0,
+        ""
+      ],
+      "title": "1 · SAP Dataset Loader · configure project_root",
+      "widgets_values_named": {
+        "project_root": "D:/my_work/synthetic-artifact-pipeline-public",
+        "split": "learning",
+        "sample_index": 0,
+        "image_member": ""
+      }
+    },
+    {
+      "id": 2,
+      "type": "PreviewImage",
+      "pos": [
+        1150,
+        80
+      ],
+      "size": [
+        370,
+        360
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "2 · Original JPEG"
+    },
+    {
+      "id": 3,
+      "type": "SaveImage",
+      "pos": [
+        1150,
+        480
+      ],
+      "size": [
+        370,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "SAP_dataset_loader_smoke"
+      ],
+      "title": "3 · Save original JPEG locally"
+    },
+    {
+      "id": 4,
+      "type": "SAPROISelector",
+      "pos": [
+        640,
+        250
+      ],
+      "size": [
+        430,
+        345
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "annotations",
+          "type": "SAP_ANNOTATIONS",
+          "link": 3
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "selection",
+          "type": "SAP_ROI_SELECTION",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "roi_preview",
+          "type": "IMAGE",
+          "links": [
+            5
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "selection_summary",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPROISelector"
+      },
+      "widgets_values": [
+        "random_n",
+        42017,
+        "fixed",
+        3,
+        0,
+        "",
+        false,
+        false
+      ],
+      "title": "4 · SAP ROI Selector · 3 products seed 42017",
+      "widgets_values_named": {
+        "mode": "random_n",
+        "seed": 42017,
+        "control_after_generate": "fixed",
+        "count": 3,
+        "instance_index": 0,
+        "class_name": "",
+        "include_generic_product": false,
+        "allow_service_targets": false
+      }
+    },
+    {
+      "id": 5,
+      "type": "PreviewImage",
+      "pos": [
+        1150,
+        850
+      ],
+      "size": [
+        370,
+        360
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "5 · Preview bbox ROI (cyan = selected)"
+    },
+    {
+      "id": 6,
+      "type": "SAPMaskBuilder",
+      "pos": [
+        1130,
+        1300
+      ],
+      "size": [
+        430,
+        310
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "selection",
+          "type": "SAP_ROI_SELECTION",
+          "link": 6
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 7
+        },
+        {
+          "name": "mask_kind",
+          "type": "COMBO",
+          "widget": {
+            "name": "mask_kind"
+          },
+          "link": null
+        },
+        {
+          "name": "pad_px",
+          "type": "INT",
+          "widget": {
+            "name": "pad_px"
+          },
+          "link": null
+        },
+        {
+          "name": "feather_px",
+          "type": "FLOAT",
+          "widget": {
+            "name": "feather_px"
+          },
+          "link": null
+        },
+        {
+          "name": "strength",
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "mask_overlay",
+          "type": "IMAGE",
+          "links": [
+            10
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "mask_summary",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPMaskBuilder"
+      },
+      "widgets_values": [
+        "soft_rect",
+        0,
+        16.0,
+        1.0
+      ],
+      "widgets_values_named": {
+        "mask_kind": "soft_rect",
+        "pad_px": 0,
+        "feather_px": 16.0,
+        "strength": 1.0
+      },
+      "title": "6 · SAP Mask Builder (selected ROI)"
+    },
+    {
+      "id": 7,
+      "type": "MaskToImage",
+      "pos": [
+        1630,
+        1270
+      ],
+      "size": [
+        280,
+        200
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskToImage"
+      },
+      "title": "7 · Convert MASK to grayscale IMAGE"
+    },
+    {
+      "id": 8,
+      "type": "PreviewImage",
+      "pos": [
+        1960,
+        1060
+      ],
+      "size": [
+        380,
+        330
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "8 · Native grayscale MASK preview"
+    },
+    {
+      "id": 9,
+      "type": "PreviewImage",
+      "pos": [
+        1960,
+        1470
+      ],
+      "size": [
+        380,
+        330
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "9 · Mask overlay preview (cyan)"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      1,
+      1,
+      4,
+      0,
+      "SAP_ANNOTATIONS"
+    ],
+    [
+      4,
+      1,
+      0,
+      4,
+      1,
+      "IMAGE"
+    ],
+    [
+      5,
+      4,
+      1,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      4,
+      0,
+      6,
+      0,
+      "SAP_ROI_SELECTION"
+    ],
+    [
+      7,
+      1,
+      0,
+      6,
+      1,
+      "IMAGE"
+    ],
+    [
+      8,
+      6,
+      0,
+      7,
+      0,
+      "MASK"
+    ],
+    [
+      9,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      10,
+      6,
+      1,
+      9,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}
