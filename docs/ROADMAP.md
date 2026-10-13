@@ -22,11 +22,13 @@ all acceptance criteria for production-quality synthetic data are met.
   bbox/annotation invariants, exact unchanged pixels outside the mask,
   clipping/coverage and return a structured QA result plus clear failures.
   **Gate:** 263 automated tests and Ruff passed; real-image ComfyUI smoke test showed green QA PASS. Negative failure cases covered by automated tests; technical PASS is not training approval.
-- [ ] **6.7 — More realistic glare (next):** introduce smooth elliptical / oriented /
-  directional illumination with controlled angle, radius, falloff,
-  intensity and seed; retain mask constraints and photometric invariants.
-  **Gate:** a small, deterministic set of varied examples reviewed for
-  unnatural rectangular borders and preserved product identity.
+- [ ] **6.7 — More realistic glare (implemented; visual acceptance pending):**
+  added a separate seeded ROI-local elliptical/directional Gaussian light
+  envelope with angle, radius, aspect, falloff, intensity and jitter controls.
+  Its actual effect MASK is routed through technical QA; geometry and annotations
+  remain invariant. This does not yet model the freezer glass plane.
+  **Gate still open:** Windows test/Ruff results, actual ComfyUI two-mode previews,
+  and manual review of unnatural borders and preserved product identity.
 - [ ] **7 — Annotation-preserving Artifact Exporter:** output modified image,
   original geometry/labels, effect mask and reproducibility manifest in a
   new local run directory; no overwrites and no publication of dataset assets.

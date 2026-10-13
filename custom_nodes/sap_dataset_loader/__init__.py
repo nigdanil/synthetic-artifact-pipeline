@@ -3,6 +3,7 @@
 No ComfyUI, torch or SAP core imports at extension discovery time.
 """
 
+from .glare import SAPRealisticGlare
 from .highlight import SAPHighlightEffect
 from .mask import SAPMaskBuilder
 from .node import SAPDatasetLoader
@@ -14,6 +15,7 @@ NODE_CLASS_MAPPINGS = {
     "SAPROISelector": SAPROISelector,
     "SAPMaskBuilder": SAPMaskBuilder,
     "SAPHighlightEffect": SAPHighlightEffect,
+    "SAPRealisticGlare": SAPRealisticGlare,
     "SAPQAValidator": SAPQAValidator,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -21,6 +23,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SAPROISelector": "SAP ROI Selector (bbox selection)",
     "SAPMaskBuilder": "SAP Mask Builder (ROI to MASK)",
     "SAPHighlightEffect": "SAP Highlight Effect (IMAGE + MASK)",
+    "SAPRealisticGlare": "SAP Realistic Glare (ROI-local directional/ellipse)",
     "SAPQAValidator": "SAP QA Validator (technical PASS/FAIL)",
 }
 

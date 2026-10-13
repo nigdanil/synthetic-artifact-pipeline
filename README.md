@@ -152,6 +152,19 @@ The public starter workflow is
 an actual machine path stays **only** under ignored `workflows/existing/`.
 See [Stage 6.6 installation and acceptance](docs/COMFYUI_QA_VALIDATOR.md).
 
+## Stage 6.7: SAP Realistic Glare — visual review pending
+
+The independent `SAP Realistic Glare` node combines selected bounding-box ROIs
+with the native effect MASK to generate *smooth rotated elliptical / directional*
+photometric illumination, controlled by angle, radius, aspect, falloff, seed and
+intensity. The new `effect_mask` goes directly into `SAP QA Validator`; source
+image, source annotations and original MASK are preserved.
+
+This is ROI-local illumination, **not a 3D glass-plane reflection model** and
+not an automatically approved YOLO sample. See
+[ComfyUI Realistic Glare](docs/COMFYUI_REALISTIC_GLARE.md) and the public
+portable starter graph `workflows/templates/sap_realistic_glare_v1.json`.
+
 ## Source layout
 
 - `src/sapipeline/` — pure Python library namespace for planned parsing, mask generation and compositing

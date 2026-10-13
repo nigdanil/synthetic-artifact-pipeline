@@ -24,6 +24,8 @@ The repository contains a tested local image-augmentation prototype (Tasks 1–5
 
 **Task 6.6 (accepted as a technical prototype after user-side ComfyUI green-PASS smoke test):** `SAP QA Validator` checks source/modified RGB, effect mask and source bbox/selection invariants; emits BOOLEAN PASS/FAIL, JSON metrics and a green/red-border review image. Technical PASS never means approved-for-training. See [ComfyUI QA Validator](COMFYUI_QA_VALIDATOR.md).
 
-**Next planned tasks (not implemented):** more realistic glare geometries (Stage 6.7), annotation-preserving exporter (Stage 7), full QA/pilot acceptance (Stages 8–9). The current bbox-local soft glow is not approved for model training without visual review. See [roadmap](ROADMAP.md). Do not publish source data or reports of third-party datasets.
+**Task 6.7 (implemented, awaiting user-side visual acceptance):** `SAP Realistic Glare` generates a seeded, smooth elliptical or directional ROI-local light footprint with bbox-edge taper. Its **actual effect mask** is passed to the existing QA node; no source bbox/labels change. This is not a physically modeled glass reflection and no new `glint` labels are inferred. See [realistic glare](COMFYUI_REALISTIC_GLARE.md).
+
+**Next planned tasks (not implemented):** annotation-preserving exporter (Stage 7), full QA/pilot acceptance (Stages 8–9). The current bbox-local soft glow is not approved for model training without visual review. See [roadmap](ROADMAP.md). Do not publish source data or reports of third-party datasets.
 
 Detailed internal project plans and source dataset audits are **kept outside this public repository**.
