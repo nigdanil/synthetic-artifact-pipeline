@@ -20,6 +20,7 @@ ALLOWED_PLACEHOLDERS = {
     "outputs/.gitkeep", "reports/.gitkeep", "workflows/existing/README.md",
     "configs/class_mappings/README.md",
 }
+LOCAL_ONLY_TEMPLATE_MARKERS = ("_LOCAL_READY", "_FIXED_LOCAL")
 BLOCKED_EXTS = {
     ".seg", ".zip", ".7z", ".rar", ".tar", ".gz", ".jpg", ".jpeg",
     ".png", ".webp", ".bmp", ".tif", ".tiff", ".gif", ".mp4", ".mov",
@@ -54,6 +55,13 @@ def main() -> int:
         path = ROOT / name
         if relative in ALLOWED_PLACEHOLDERS:
             continue
+        if (
+            relative.startswith("workflows/templates/")
+            and relative.endswith(".json")
+            and any(marker in Path(relative).stem for marker in LOCAL_ONLY_TEMPLATE_MARKERS)
+        ):
+            errors.append(f"Blocked machine-specific workflow: {relative}")
+            continue
         if any(relative.startswith(prefix) for prefix in BLOCKED_DIRS):
             errors.append(f"Blocked local-only path: {relative}")
             continue
@@ -75,6 +83,11 @@ def main() -> int:
             errors.append(f"Unreviewed staged file > 1 MiB: {relative}")
             continue
         content = staged.stdout.decode("utf-8", errors="replace")
+        # Public workflow templates cannot contain absolute Windows machine paths.
+        if relative.startswith("workflows/templates/") and re.search(
+            r"(?i)[A-Z]:[\\/]", content
+        ):
+            errors.append(f"Absolute local path in public workflow template: {relative}")
         for pattern in SECRET_PATTERNS:
             if pattern.search(content):
                 errors.append(f"Possible credential/private home path in: {relative}")

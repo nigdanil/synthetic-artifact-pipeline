@@ -43,6 +43,9 @@ secrets.*
 # Personal workflow, vendor mappings and internal project reference notes
 /workflows/existing/**
 !/workflows/existing/README.md
+# Machine-specific ComfyUI workflows must stay local, even under templates
+/workflows/templates/*_LOCAL_READY*.json
+/workflows/templates/*_FIXED_LOCAL*.json
 /configs/class_mappings/**
 !/configs/class_mappings/README.md
 /docs/reference/
