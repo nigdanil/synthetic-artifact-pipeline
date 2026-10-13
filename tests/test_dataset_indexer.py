@@ -1,12 +1,12 @@
 """Synthetic-only fixtures: no proprietary photos or annotations in Git history."""
 
-from io import BytesIO
 import json
+from io import BytesIO
 from pathlib import Path
 from zipfile import ZipFile
 
-from PIL import Image
 import pytest
+from PIL import Image
 
 from sapipeline.dataset import DatasetIndexError, build_index
 

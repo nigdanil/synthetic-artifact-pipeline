@@ -6,10 +6,14 @@ from pathlib import Path
 import pytest
 
 from sapipeline.annotations import (
-    AnnotationError, load_class_mapping, parse_seg, parse_yolo, to_seg_json,
-    to_yolo_txt, validate_class_mapping,
+    AnnotationError,
+    load_class_mapping,
+    parse_seg,
+    parse_yolo,
+    to_seg_json,
+    to_yolo_txt,
+    validate_class_mapping,
 )
-
 
 CLASSES = {0: "sample_one", 5: "sample_two"}
 

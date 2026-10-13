@@ -1,7 +1,7 @@
 """Synthetic CLI integration checks; reports stay in Git-ignored private area."""
 
-from io import BytesIO
 import json
+from io import BytesIO
 from pathlib import Path
 from zipfile import ZipFile
 

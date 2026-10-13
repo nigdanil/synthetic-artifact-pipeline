@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
-from copy import deepcopy
-from io import BytesIO
 import importlib.util
 import json
+from copy import deepcopy
+from io import BytesIO
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
-from PIL import Image
 import pytest
+from PIL import Image
 
 from sapipeline.dataset import (
     DatasetIndexError,
@@ -19,7 +19,6 @@ from sapipeline.dataset import (
     load_indexed_pair,
     read_private_index,
 )
-
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts/preview_roi.py"
 
