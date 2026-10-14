@@ -58,6 +58,8 @@ for training.
 - no duplicate raw source image SHA-256 across `learning` and `verification`,
   including entries in the private index;
 - stable `run_id`, no missing files, unsafe relative paths or symlinks;
+- regular files such as `.zip` backups under `outputs/sap_runs/` are ignored,
+  while all directories (including incomplete ones) and symlinks remain fail-closed;
 - reviewer verdict bound to `manifest_sha256` and all three manual checks.
 
 **Acceptance gate:** at least 20 valid exported bundles, at least five distinct

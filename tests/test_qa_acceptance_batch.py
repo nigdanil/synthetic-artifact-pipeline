@@ -56,6 +56,50 @@ def test_real_stage7_synthetic_bundle_is_valid_but_pending(tmp_path: Path) -> No
     assert set(template["reviews"][0]["checks"].values()) == {False}
 
 
+def test_stray_zip_and_regular_file_do_not_count_as_bundles(tmp_path: Path) -> None:
+    bundle = one_bundle(tmp_path)
+    approved = approvals(tmp_path)
+    runs = tmp_path / "outputs/sap_runs"
+    (runs / "example_backup.zip").write_bytes(b"local backup")
+    (runs / "notes.txt").write_text("unrelated file", encoding="utf-8")
+
+    result = audit_batch(tmp_path, reviews=approved, min_outputs=1, min_unique_sources=1)
+    assert result.report["status"] == "ACCEPTED"
+    assert result.report["totals"]["outputs"] == 1
+    assert result.report["totals"]["valid"] == 1
+    assert result.report["totals"]["manually_approved"] == 1
+    assert [run["run_id"] for run in result.report["runs"]] == [bundle.name]
+    assert result.report["gates"]["no_orphan_reviews"] is True
+
+
+def test_incomplete_directory_still_fails_batch_gate(tmp_path: Path) -> None:
+    one_bundle(tmp_path)
+    (tmp_path / "outputs/sap_runs/incomplete_run").mkdir()
+    result = audit_batch(tmp_path, min_outputs=1, min_unique_sources=1)
+    assert result.report["status"] == "FAILED"
+    assert result.report["totals"]["outputs"] == 2
+    assert result.report["totals"]["invalid"] == 1
+    failure = next(run for run in result.report["runs"] if run["run_id"] == "incomplete_run")
+    assert "bundle_readable_and_complete" in failure["issues"]
+
+
+def test_symlinked_regular_file_is_not_silently_skipped(tmp_path: Path) -> None:
+    one_bundle(tmp_path)
+    runs = tmp_path / "outputs/sap_runs"
+    backup = runs / "backup.zip"
+    backup.write_bytes(b"local backup")
+    link = runs / "linked_backup.zip"
+    try:
+        link.symlink_to(backup)
+    except (OSError, NotImplementedError):
+        pytest.skip("Creating symlinks requires privileges on this Windows installation")
+    result = audit_batch(tmp_path, min_outputs=1, min_unique_sources=1)
+    assert result.report["status"] == "FAILED"
+    assert result.report["totals"]["invalid"] == 1
+    bad = next(run for run in result.report["runs"] if run["run_id"] == link.name)
+    assert "safe_run_directory" in bad["issues"]
+
+
 def test_manual_approval_is_bound_to_manifest(tmp_path: Path) -> None:
     run = one_bundle(tmp_path)
     reviews = approvals(tmp_path)

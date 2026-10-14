@@ -234,6 +234,9 @@ def audit_batch(
     if runs_folder.is_symlink():
         raise AcceptanceError("runs folder must not be a symlink")
     entries = sorted(runs_folder.iterdir(), key=lambda p: p.name) if runs_folder.is_dir() else []
+    # A regular file (e.g. a ZIP backup) is not an exported run.
+    # Keep symlinks and ALL directories: _run_check must reject unsafe/incomplete runs.
+    entries = [p for p in entries if p.is_symlink() or p.is_dir()]
     if entries:
         index = read_private_index(root / "data/work/index/dataset_index.json")
     else:
