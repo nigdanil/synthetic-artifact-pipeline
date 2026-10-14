@@ -1,0 +1,1111 @@
+{
+  "id": "sap-artifact-exporter-v1",
+  "revision": 0,
+  "last_node_id": 17,
+  "last_link_id": 33,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "SAPDatasetLoader",
+      "pos": [
+        65,
+        250
+      ],
+      "size": [
+        480,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            1,
+            4,
+            7,
+            11,
+            15,
+            24
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "annotations",
+          "type": "SAP_ANNOTATIONS",
+          "links": [
+            3,
+            18,
+            27
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "source_summary",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        },
+        {
+          "name": "source_context",
+          "type": "SAP_SOURCE_CONTEXT",
+          "links": [
+            31
+          ],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPDatasetLoader"
+      },
+      "widgets_values": [
+        "",
+        "learning",
+        0,
+        ""
+      ],
+      "title": "1 · SAP Dataset Loader · configure project_root",
+      "widgets_values_named": {
+        "project_root": ""
+      }
+    },
+    {
+      "id": 2,
+      "type": "PreviewImage",
+      "pos": [
+        1150,
+        80
+      ],
+      "size": [
+        370,
+        360
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "2 · Original JPEG"
+    },
+    {
+      "id": 4,
+      "type": "SAPROISelector",
+      "pos": [
+        640,
+        250
+      ],
+      "size": [
+        430,
+        345
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "annotations",
+          "type": "SAP_ANNOTATIONS",
+          "link": 3
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "selection",
+          "type": "SAP_ROI_SELECTION",
+          "links": [
+            6,
+            19,
+            28
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "roi_preview",
+          "type": "IMAGE",
+          "links": [
+            5
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "selection_summary",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPROISelector"
+      },
+      "widgets_values": [
+        "random_n",
+        42017,
+        "fixed",
+        3,
+        0,
+        "",
+        false,
+        false
+      ],
+      "title": "4 · SAP ROI Selector · 3 products seed 42017"
+    },
+    {
+      "id": 5,
+      "type": "PreviewImage",
+      "pos": [
+        1150,
+        850
+      ],
+      "size": [
+        370,
+        360
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "5 · Preview bbox ROI (cyan = selected)"
+    },
+    {
+      "id": 6,
+      "type": "SAPMaskBuilder",
+      "pos": [
+        1130,
+        1300
+      ],
+      "size": [
+        430,
+        310
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "selection",
+          "type": "SAP_ROI_SELECTION",
+          "link": 6
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 7
+        },
+        {
+          "name": "mask_kind",
+          "type": "COMBO",
+          "widget": {
+            "name": "mask_kind"
+          },
+          "link": null
+        },
+        {
+          "name": "pad_px",
+          "type": "INT",
+          "widget": {
+            "name": "pad_px"
+          },
+          "link": null
+        },
+        {
+          "name": "feather_px",
+          "type": "FLOAT",
+          "widget": {
+            "name": "feather_px"
+          },
+          "link": null
+        },
+        {
+          "name": "strength",
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "mask_overlay",
+          "type": "IMAGE",
+          "links": [
+            10
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "mask_summary",
+          "type": "STRING",
+          "links": [
+            33
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPMaskBuilder"
+      },
+      "widgets_values": [
+        "soft_rect",
+        0,
+        16.0,
+        1.0
+      ],
+      "widgets_values_named": {
+        "mask_kind": "soft_rect",
+        "pad_px": 0,
+        "feather_px": 16.0,
+        "strength": 1.0
+      },
+      "title": "6 · SAP Mask Builder (selected ROI)"
+    },
+    {
+      "id": 7,
+      "type": "MaskToImage",
+      "pos": [
+        1630,
+        1270
+      ],
+      "size": [
+        280,
+        200
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskToImage"
+      },
+      "title": "7 · Convert MASK to grayscale IMAGE"
+    },
+    {
+      "id": 8,
+      "type": "PreviewImage",
+      "pos": [
+        1960,
+        1060
+      ],
+      "size": [
+        380,
+        330
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "8 · Native grayscale MASK preview"
+    },
+    {
+      "id": 9,
+      "type": "PreviewImage",
+      "pos": [
+        1960,
+        1470
+      ],
+      "size": [
+        380,
+        330
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "9 · Mask overlay preview (cyan)"
+    },
+    {
+      "id": 10,
+      "type": "SAPGlassReflection",
+      "pos": [
+        1640,
+        1860
+      ],
+      "size": [
+        480,
+        470
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "quad_json",
+          "type": "STRING",
+          "widget": {
+            "name": "quad_json"
+          },
+          "link": null
+        },
+        {
+          "name": "angle_deg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "angle_deg"
+          },
+          "link": null
+        },
+        {
+          "name": "band_width",
+          "type": "FLOAT",
+          "widget": {
+            "name": "band_width"
+          },
+          "link": null
+        },
+        {
+          "name": "band_count",
+          "type": "INT",
+          "widget": {
+            "name": "band_count"
+          },
+          "link": null
+        },
+        {
+          "name": "band_separation",
+          "type": "FLOAT",
+          "widget": {
+            "name": "band_separation"
+          },
+          "link": null
+        },
+        {
+          "name": "edge_feather",
+          "type": "FLOAT",
+          "widget": {
+            "name": "edge_feather"
+          },
+          "link": null
+        },
+        {
+          "name": "intensity",
+          "type": "FLOAT",
+          "widget": {
+            "name": "intensity"
+          },
+          "link": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "effect_image",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            13,
+            16,
+            25
+          ]
+        },
+        {
+          "name": "effect_mask",
+          "type": "MASK",
+          "slot_index": 1,
+          "links": [
+            17,
+            22,
+            26
+          ]
+        },
+        {
+          "name": "effect_summary",
+          "type": "STRING",
+          "slot_index": 2,
+          "links": [
+            32
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPGlassReflection"
+      },
+      "widgets_values": [
+        "[[0.09,0.21],[0.98,0.21],[0.99,0.75],[0.03,0.74]]",
+        -12.0,
+        0.06,
+        2,
+        0.23,
+        0.035,
+        0.65,
+        42017
+      ],
+      "widgets_values_named": {
+        "quad_json": "[[0.09,0.21],[0.98,0.21],[0.99,0.75],[0.03,0.74]]",
+        "angle_deg": -12.0,
+        "band_width": 0.06,
+        "band_count": 2,
+        "band_separation": 0.23,
+        "edge_feather": 0.035,
+        "intensity": 0.65,
+        "seed": 42017
+      },
+      "title": "10 · SAP Glass Reflection V1 · projected glass strips"
+    },
+    {
+      "id": 11,
+      "type": "PreviewImage",
+      "pos": [
+        2130,
+        1850
+      ],
+      "size": [
+        410,
+        390
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 13
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "title": "11 · Glass reflection IMAGE preview"
+    },
+    {
+      "id": 13,
+      "type": "SAPQAValidator",
+      "pos": [
+        2660,
+        2330
+      ],
+      "size": [
+        480,
+        350
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "original",
+          "type": "IMAGE",
+          "link": 15
+        },
+        {
+          "name": "modified",
+          "type": "IMAGE",
+          "link": 16
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 17
+        },
+        {
+          "name": "annotations",
+          "type": "SAP_ANNOTATIONS",
+          "link": 18
+        },
+        {
+          "name": "selection",
+          "type": "SAP_ROI_SELECTION",
+          "link": 19
+        },
+        {
+          "name": "max_new_clipping_fraction",
+          "type": "FLOAT",
+          "widget": {
+            "name": "max_new_clipping_fraction"
+          },
+          "link": null
+        },
+        {
+          "name": "max_mask_coverage",
+          "type": "FLOAT",
+          "widget": {
+            "name": "max_mask_coverage"
+          },
+          "link": null
+        },
+        {
+          "name": "outside_tolerance",
+          "type": "FLOAT",
+          "widget": {
+            "name": "outside_tolerance"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "qa_pass",
+          "type": "BOOLEAN",
+          "slot_index": 0,
+          "links": [
+            29
+          ]
+        },
+        {
+          "name": "qa_report",
+          "type": "STRING",
+          "slot_index": 1,
+          "links": [
+            30
+          ]
+        },
+        {
+          "name": "qa_preview",
+          "type": "IMAGE",
+          "slot_index": 2,
+          "links": [
+            20
+          ]
+        }
+      ],
+      "title": "13 · QA on realistic effect mask",
+      "properties": {
+        "Node name for S&R": "SAPQAValidator"
+      },
+      "widgets_values": [
+        0.25,
+        0.6,
+        0.0
+      ],
+      "widgets_values_named": {
+        "max_new_clipping_fraction": 0.25,
+        "max_mask_coverage": 0.6,
+        "outside_tolerance": 0.0
+      }
+    },
+    {
+      "id": 14,
+      "type": "PreviewImage",
+      "pos": [
+        3220,
+        2280
+      ],
+      "size": [
+        430,
+        420
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 20
+        }
+      ],
+      "outputs": [],
+      "title": "14 · QA STATUS green=PASS red=FAIL",
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 15,
+      "type": "MaskToImage",
+      "pos": [
+        1690,
+        2490
+      ],
+      "size": [
+        300,
+        200
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            23
+          ]
+        }
+      ],
+      "title": "15 · Convert actual glare MASK to grayscale",
+      "properties": {
+        "Node name for S&R": "MaskToImage"
+      }
+    },
+    {
+      "id": 16,
+      "type": "PreviewImage",
+      "pos": [
+        2110,
+        2440
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "16 · Actual glass reflection mask",
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 17,
+      "type": "SAPArtifactExporter",
+      "pos": [
+        2600,
+        2040
+      ],
+      "size": [
+        470,
+        420
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "project_root",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "project_root"
+          }
+        },
+        {
+          "name": "run_id",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "run_id"
+          }
+        },
+        {
+          "name": "original",
+          "type": "IMAGE",
+          "link": 24
+        },
+        {
+          "name": "modified",
+          "type": "IMAGE",
+          "link": 25
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 26
+        },
+        {
+          "name": "annotations",
+          "type": "SAP_ANNOTATIONS",
+          "link": 27
+        },
+        {
+          "name": "selection",
+          "type": "SAP_ROI_SELECTION",
+          "link": 28
+        },
+        {
+          "name": "qa_pass",
+          "type": "BOOLEAN",
+          "link": 29
+        },
+        {
+          "name": "qa_report",
+          "type": "STRING",
+          "link": 30
+        },
+        {
+          "name": "source_context",
+          "type": "SAP_SOURCE_CONTEXT",
+          "link": 31
+        },
+        {
+          "name": "effect_summary",
+          "type": "STRING",
+          "link": 32
+        },
+        {
+          "name": "mask_summary",
+          "type": "STRING",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "name": "export_directory",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        },
+        {
+          "name": "export_summary",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAPArtifactExporter"
+      },
+      "widgets_values": [
+        "",
+        "glass_reflection_0001"
+      ],
+      "widgets_values_named": {
+        "project_root": "",
+        "run_id": "glass_reflection_0001"
+      },
+      "title": "17 · SAP Artifact Exporter · QA-gated private outputs"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      1,
+      1,
+      4,
+      0,
+      "SAP_ANNOTATIONS"
+    ],
+    [
+      4,
+      1,
+      0,
+      4,
+      1,
+      "IMAGE"
+    ],
+    [
+      5,
+      4,
+      1,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      4,
+      0,
+      6,
+      0,
+      "SAP_ROI_SELECTION"
+    ],
+    [
+      7,
+      1,
+      0,
+      6,
+      1,
+      "IMAGE"
+    ],
+    [
+      8,
+      6,
+      0,
+      7,
+      0,
+      "MASK"
+    ],
+    [
+      9,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      10,
+      6,
+      1,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      1,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      1,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      16,
+      10,
+      0,
+      13,
+      1,
+      "IMAGE"
+    ],
+    [
+      17,
+      10,
+      1,
+      13,
+      2,
+      "MASK"
+    ],
+    [
+      18,
+      1,
+      1,
+      13,
+      3,
+      "SAP_ANNOTATIONS"
+    ],
+    [
+      19,
+      4,
+      0,
+      13,
+      4,
+      "SAP_ROI_SELECTION"
+    ],
+    [
+      20,
+      13,
+      2,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      22,
+      10,
+      1,
+      15,
+      0,
+      "MASK"
+    ],
+    [
+      23,
+      15,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      24,
+      1,
+      0,
+      17,
+      2,
+      "IMAGE"
+    ],
+    [
+      25,
+      10,
+      0,
+      17,
+      3,
+      "IMAGE"
+    ],
+    [
+      26,
+      10,
+      1,
+      17,
+      4,
+      "MASK"
+    ],
+    [
+      27,
+      1,
+      1,
+      17,
+      5,
+      "SAP_ANNOTATIONS"
+    ],
+    [
+      28,
+      4,
+      0,
+      17,
+      6,
+      "SAP_ROI_SELECTION"
+    ],
+    [
+      29,
+      13,
+      0,
+      17,
+      7,
+      "BOOLEAN"
+    ],
+    [
+      30,
+      13,
+      1,
+      17,
+      8,
+      "STRING"
+    ],
+    [
+      31,
+      1,
+      3,
+      17,
+      9,
+      "SAP_SOURCE_CONTEXT"
+    ],
+    [
+      32,
+      10,
+      2,
+      17,
+      10,
+      "STRING"
+    ],
+    [
+      33,
+      6,
+      2,
+      17,
+      11,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.47,
+      "offset": [
+        30,
+        20
+      ]
+    }
+  },
+  "version": 0.4
+}

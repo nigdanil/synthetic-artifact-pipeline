@@ -151,15 +151,25 @@ def export_artifact(
     qa = _json_object(qa_report, "qa_report")
     if qa.get("schema_version") != "sap-qa-v1" or qa.get("status") != "PASS":
         raise ArtifactExportError("Export blocked: QA report must be a genuine PASS schema")
-    if effect.get("schema_version") != "sap-glare-v1":
-        raise ArtifactExportError("V1 export supports SAP Realistic Glare summaries only")
-    if effect.get("kind") not in ("directional", "elliptical"):
-        raise ArtifactExportError("Unrecognized effect kind")
+    effect_schema = effect.get("schema_version")
+    if effect_schema == "sap-glare-v1":
+        if effect.get("kind") not in ("directional", "elliptical"):
+            raise ArtifactExportError("Unrecognized effect kind")
+        numeric_fields = ("angle_deg", "radius_scale", "aspect_ratio", "falloff",
+                          "intensity", "center_jitter")
+    elif effect_schema == "sap-glass-reflection-v1":
+        if effect.get("kind") != "projected_strips":
+            raise ArtifactExportError("Unrecognized glass effect kind")
+        if type(effect.get("band_count")) is not int or not 1 <= effect["band_count"] <= 3:
+            raise ArtifactExportError("Invalid glass band_count")
+        numeric_fields = ("angle_deg", "band_width", "band_separation", "edge_feather",
+                          "intensity")
+    else:
+        raise ArtifactExportError("Unsupported SAP effect schema")
     seed = effect.get("seed")
     if type(seed) is not int or seed < 0:
         raise ArtifactExportError("effect seed must be a nonnegative integer")
-    for name in ("angle_deg", "radius_scale", "aspect_ratio", "falloff", "intensity",
-                 "center_jitter"):
+    for name in numeric_fields:
         val = effect.get(name)
         if isinstance(val, bool) or not isinstance(val, (int, float)):
             raise TypeError(f"effect {name} must be numeric")
@@ -191,6 +201,25 @@ def export_artifact(
     if effect.get("effect_mask_active_pixels") != verdict.metrics.get("mask_active_pixels"):
         raise ArtifactExportError("Effect metadata differs from MASK")
     source_ref = _validate_provenance(root, source, orig, annotations)
+    if effect_schema == "sap-glass-reflection-v1":
+        from sapipeline.effects.glass_reflection import (
+            GlassReflectionError,
+            apply_glass_reflection,
+        )
+
+        try:
+            expected = apply_glass_reflection(
+                Image.fromarray(orig, mode="RGB"), quad_norm=effect.get("quad_norm"),
+                seed=seed, intensity=effect["intensity"], angle_deg=effect["angle_deg"],
+                band_width=effect["band_width"], band_count=effect["band_count"],
+                band_separation=effect["band_separation"],
+                edge_feather=effect["edge_feather"],
+            )
+        except GlassReflectionError as exc:
+            raise ArtifactExportError(f"Invalid glass effect metadata: {exc}") from exc
+        if (not np.array_equal(np.asarray(expected.image), mod)
+                or not np.array_equal(expected.effect_mask, mask)):
+            raise ArtifactExportError("Glass reflection pixels/mask differ from declared parameters")
 
     # Never allow an output outside the project's Git-ignored outputs directory.
     outputs = root / "outputs"

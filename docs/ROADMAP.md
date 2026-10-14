@@ -29,16 +29,26 @@ all acceptance criteria for production-quality synthetic data are met.
   remain invariant. This does not yet model the freezer glass plane.
   **Gate:** 286 Windows automated tests/Ruff passed; both ComfyUI modes
   rendered nonrectangular masks and green QA previews. No training approval.
-- [ ] **7 — Artifact Exporter (implemented; user acceptance pending):** private,
-  QA-gated bundle containing original/modified PNG, 16-bit actual effect mask,
-  geometry-preserving SEG, QA JSON and reproducibility manifest. Uses a verified
-  opaque source context from Dataset Loader; unique run directories only.
-  **Gate still open:** Windows/Ruff tests and ComfyUI export smoke test; re-open
-  every artifact, verify hashes, seed and bbox, and confirm duplicate/QA FAIL
-  cannot overwrite or create an approved bundle. See `COMFYUI_ARTIFACT_EXPORTER.md`.
-- [ ] **8 — Full QA acceptance:** review at least 20 outputs, including
-  image quality, clipping, duplicate leakage and target/class integrity.
-  **Gate:** automated reports plus manual approvals; failed results rejected.
+- [x] **7 — Artifact Exporter (accepted):** QA-gated private bundles include
+  original/modified PNG, 16-bit effect MASK, original SEG geometry, QA JSON,
+  SHA-256 manifest and verified ZIP source provenance. Windows: 306 tests passed,
+  1 skipped, Ruff clean; real ComfyUI `glare_0001` export produced all 6 files,
+  with independent manifest hash verification and a clean Git commit `6a778f2`.
+- [ ] **8 — Full QA acceptance (implementation ready; dataset gate open):**
+  audit every Stage-7 bundle and its private ZIP source, detect broken hashes,
+  changed geometry, unmasked edits and cross-split leakage; create a separate
+  manifest-bound human review file. Require at least 20 reviewed bundles,
+  at least 5 unique sources, explicit approval of each, no failed checks.
+  **Gate still open:** Windows tests and actual human review of 20 exported
+  outputs. CLI and instructions: `docs/QA_ACCEPTANCE_STAGE8.md`.
+- [ ] **8.1 — Visual Review Sheet (implementation pending user-side check):**
+  offline, private original/modified/mask/diff comparison; target ROI zooms,
+  changed pixel and brightness metrics, histogram, effect parameters, QA and
+  manifest-bound manual verdict. Stored under ignored `reports/visual_review/`
+  without changing any six-file Stage-7 export.
+  **Gate:** Windows pytest/Ruff, a real `glass_reflection_0001` report,
+  inspect readability and verify no source/manifest bytes change.
+  See `docs/VISUAL_REVIEW_SHEET.md`.
 - [ ] **9 — Batch pilot:** produce 100 variants from a safe set of unique
   source scenes, with resume, seeds and separate QC results.
   **Gate:** no missing manifests/labels, no cross-split leakage and no
