@@ -57,7 +57,7 @@ def project(tmp_path: Path) -> Path:
 
 def test_node_metadata_and_lazy_import() -> None:
     node = _get_node()
-    assert node.RETURN_TYPES == ("IMAGE", "SAP_ANNOTATIONS", "STRING")
+    assert node.RETURN_TYPES == ("IMAGE", "SAP_ANNOTATIONS", "STRING", "SAP_SOURCE_CONTEXT")
     assert node.FUNCTION == "load"
     assert node.CATEGORY == "SAP/Dataset"
     assert "project_root" in node.INPUT_TYPES()["required"]
@@ -91,7 +91,7 @@ def test_real_zip_loader_tensor_and_annotations(project: Path, monkeypatch) -> N
     monkeypatch.setattr(node, "_core", staticmethod(lambda _root: (
         __import__("sapipeline.dataset", fromlist=["read_private_index"]), project
     )))
-    image, annotations, summary = node().load(str(project), "learning", 0, "")
+    image, annotations, summary, source_context = node().load(str(project), "learning", 0, "")
     assert isinstance(image, StubTensor)
     assert image.array.dtype == np.float32
     assert image.array.shape == (1, 8, 12, 3)
@@ -103,6 +103,9 @@ def test_real_zip_loader_tensor_and_annotations(project: Path, monkeypatch) -> N
     assert details["size_px"] == [12, 8]
     assert "fictional_product" not in summary
     assert "demo.jpg" not in summary
+    assert source_context["image_member"] == "img/demo.jpg"
+    assert source_context["annotation_member"] == "seg/demo.seg"
+    assert len(source_context["image_sha256"]) == 64
 
 
 @pytest.mark.parametrize("kwargs, expected", [

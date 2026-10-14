@@ -86,3 +86,12 @@ is still rejected until manually resolved.
   inference are required.
 - For manual rollback, stop ComfyUI and remove only the newly copied
   `custom_nodes/sap_dataset_loader/` directory, then restart ComfyUI.
+
+## Stage 7 extension: opaque source context
+
+The fourth output, `SAP_SOURCE_CONTEXT`, carries the hash-verified index
+entry's source archive/member names and SHA-256 hashes **in memory** for
+`SAP Artifact Exporter`. Existing output slots 0–2 keep their semantics.
+`source_summary` stays short and does not reveal private image-member names.
+Restart ComfyUI after updating `node.py` and `__init__.py`, then load the new
+Stage 7 workflow. Do not include the opaque context in published JSON.

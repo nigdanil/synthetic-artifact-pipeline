@@ -152,7 +152,7 @@ The public starter workflow is
 an actual machine path stays **only** under ignored `workflows/existing/`.
 See [Stage 6.6 installation and acceptance](docs/COMFYUI_QA_VALIDATOR.md).
 
-## Stage 6.7: SAP Realistic Glare — visual review pending
+## Stage 6.7: SAP Realistic Glare — technical prototype accepted
 
 The independent `SAP Realistic Glare` node combines selected bounding-box ROIs
 with the native effect MASK to generate *smooth rotated elliptical / directional*
@@ -164,6 +164,21 @@ This is ROI-local illumination, **not a 3D glass-plane reflection model** and
 not an automatically approved YOLO sample. See
 [ComfyUI Realistic Glare](docs/COMFYUI_REALISTIC_GLARE.md) and the public
 portable starter graph `workflows/templates/sap_realistic_glare_v1.json`.
+
+## Stage 7: SAP Artifact Exporter — user acceptance pending
+
+The new QA-gated `SAP Artifact Exporter` output node produces one **private**
+complete bundle under `outputs/sap_runs/<run_id>/`: decoded original PNG,
+modified PNG, 16-bit actual effect mask, geometry-preserving SEG, recomputed
+technical QA JSON and a SHA-256 provenance manifest. It refuses duplicate
+run IDs, failed QA, stale metadata and mismatched source ZIP hashes. Nothing
+is exported as "approved for training" without Stage 8 manual review.
+
+Dataset Loader adds an **opaque fourth** `SAP_SOURCE_CONTEXT` output (the first
+three sockets are unchanged). Only the private local workflow contains a
+real project path; the public template has blank paths. See
+[Stage 7 implementation, tests and operating instructions](docs/COMFYUI_ARTIFACT_EXPORTER.md)
+and `workflows/templates/sap_artifact_exporter_v1.json`.
 
 ## Source layout
 

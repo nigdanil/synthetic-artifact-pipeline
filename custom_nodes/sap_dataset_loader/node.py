@@ -17,8 +17,8 @@ from pathlib import Path
 class SAPDatasetLoader:
     """Read an indexed JPEG/SEG pair and expose IMAGE + opaque bbox annotations."""
 
-    RETURN_TYPES = ("IMAGE", "SAP_ANNOTATIONS", "STRING")
-    RETURN_NAMES = ("image", "annotations", "source_summary")
+    RETURN_TYPES = ("IMAGE", "SAP_ANNOTATIONS", "STRING", "SAP_SOURCE_CONTEXT")
+    RETURN_NAMES = ("image", "annotations", "source_summary", "source_context")
     FUNCTION = "load"
     CATEGORY = "SAP/Dataset"
     DESCRIPTION = (
@@ -116,4 +116,8 @@ class SAPDatasetLoader:
         )
         # Return the AnnotationDocument in-process; do not serialize raw vendor
         # class names, paths, or source files into the public workflow JSON.
-        return (image, pair.annotations, summary)
+        # Opaque in-process provenance: no original filenames in public workflow JSON.
+        return (image, pair.annotations, summary, {key: entry[key] for key in (
+            "archive", "image_member", "annotation_member", "image_sha256",
+            "annotation_sha256", "split",
+        )})

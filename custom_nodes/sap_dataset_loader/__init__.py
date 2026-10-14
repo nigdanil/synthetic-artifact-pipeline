@@ -3,6 +3,7 @@
 No ComfyUI, torch or SAP core imports at extension discovery time.
 """
 
+from .export import SAPArtifactExporter
 from .glare import SAPRealisticGlare
 from .highlight import SAPHighlightEffect
 from .mask import SAPMaskBuilder
@@ -17,6 +18,7 @@ NODE_CLASS_MAPPINGS = {
     "SAPHighlightEffect": SAPHighlightEffect,
     "SAPRealisticGlare": SAPRealisticGlare,
     "SAPQAValidator": SAPQAValidator,
+    "SAPArtifactExporter": SAPArtifactExporter,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "SAPDatasetLoader": "SAP Dataset Loader (ZIP + SEG)",
@@ -25,6 +27,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SAPHighlightEffect": "SAP Highlight Effect (IMAGE + MASK)",
     "SAPRealisticGlare": "SAP Realistic Glare (ROI-local directional/ellipse)",
     "SAPQAValidator": "SAP QA Validator (technical PASS/FAIL)",
+    "SAPArtifactExporter": "SAP Artifact Exporter (private QA-gated bundle)",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

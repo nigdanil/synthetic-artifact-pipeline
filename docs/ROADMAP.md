@@ -22,18 +22,20 @@ all acceptance criteria for production-quality synthetic data are met.
   bbox/annotation invariants, exact unchanged pixels outside the mask,
   clipping/coverage and return a structured QA result plus clear failures.
   **Gate:** 263 automated tests and Ruff passed; real-image ComfyUI smoke test showed green QA PASS. Negative failure cases covered by automated tests; technical PASS is not training approval.
-- [ ] **6.7 — More realistic glare (implemented; visual acceptance pending):**
+- [x] **6.7 — Realistic glare (accepted technical prototype):**
   added a separate seeded ROI-local elliptical/directional Gaussian light
   envelope with angle, radius, aspect, falloff, intensity and jitter controls.
   Its actual effect MASK is routed through technical QA; geometry and annotations
   remain invariant. This does not yet model the freezer glass plane.
-  **Gate still open:** Windows test/Ruff results, actual ComfyUI two-mode previews,
-  and manual review of unnatural borders and preserved product identity.
-- [ ] **7 — Annotation-preserving Artifact Exporter:** output modified image,
-  original geometry/labels, effect mask and reproducibility manifest in a
-  new local run directory; no overwrites and no publication of dataset assets.
-  **Gate:** re-open every artifact, verify hashes, metadata, seed and bbox;
-  verify safe failure on incomplete writes or duplicate output names.
+  **Gate:** 286 Windows automated tests/Ruff passed; both ComfyUI modes
+  rendered nonrectangular masks and green QA previews. No training approval.
+- [ ] **7 — Artifact Exporter (implemented; user acceptance pending):** private,
+  QA-gated bundle containing original/modified PNG, 16-bit actual effect mask,
+  geometry-preserving SEG, QA JSON and reproducibility manifest. Uses a verified
+  opaque source context from Dataset Loader; unique run directories only.
+  **Gate still open:** Windows/Ruff tests and ComfyUI export smoke test; re-open
+  every artifact, verify hashes, seed and bbox, and confirm duplicate/QA FAIL
+  cannot overwrite or create an approved bundle. See `COMFYUI_ARTIFACT_EXPORTER.md`.
 - [ ] **8 — Full QA acceptance:** review at least 20 outputs, including
   image quality, clipping, duplicate leakage and target/class integrity.
   **Gate:** automated reports plus manual approvals; failed results rejected.
